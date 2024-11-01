@@ -10,7 +10,7 @@ if( isset($_GET["pesquisa"]) )
     {
        //Se a variavel estiver vazia executa aqui 
        include "conexao.php";
-       $sql = "Select Id, Descricao, Valor, Codigo_barras, Imagem from Produtos order by Id desc";
+       $sql = "Select Categoria from Produtos order by Categoria desc";
        $resultado = $conexao->query($sql);
        
        $conexao->close();
@@ -19,7 +19,7 @@ if( isset($_GET["pesquisa"]) )
     {
         //Aqui vai a lógica da pesquisa
         include "conexao.php";
-        $sql = "Select Id, Descricao, Valor, Codigo_barras, Imagem 
+        $sql = "Select Categoria 
                 from Produtos  
                 where Descricao like '%$pesquisa%' || Codigo_Barras = '$pesquisa'
                 order by Id desc";
@@ -32,8 +32,11 @@ else
 {
     $pesquisa = "";
     include "conexao.php";
-    $sql = "Select Id, Descricao, Valor, Codigo_barras, Imagem from Produtos order by Id desc";
+    $sql = "Select Categoria FROM Categorias";
     $resultado = $conexao->query($sql);
+
+    $sql1 = "Select Descricao from Produtos";
+    $resultado1 = $conexao->query($sql1);
    
     $conexao->close();
     
@@ -71,20 +74,49 @@ else
                         <table class="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Categoria</th>
-                                <th scope="col">Descrição</th>                                
+                                <th scope="col">Categoria</th>                                                              
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
-                            
+                          
                             if ($resultado->num_rows > 0) {
-                                while($row = $resultado->fetch_assoc()) {
+
+                                
+                                while($row = $resultado->fetch_assoc()){
                                     echo "<tr>";
-                                    echo "<td>" . $row["Categoria"] . "</td>";
-                                    echo "<td>" . $row["Descricao"] . "</td>";
-                                    echo "</tr>";
+                                    echo "<td>" . $row["Categoria"] . "</td>";                                  
+                                    echo "</tr>";                            
                                 }
+                                
+                                
+                                
+                            } else {
+                                echo "<tr><td colspan='3'>Nenhum registro encontrado</td></tr>";
+                            }
+                            ?>
+                                                    
+                        </tbody>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Descrição</th>                                                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                          
+                            if ($resultado->num_rows > 0) {
+
+                                
+                                while($row = $resultado1->fetch_assoc()){
+                                    echo "<tr>";
+                                    echo "<td>" . $row["Descricao"] . "</td>";                                  
+                                    echo "</tr>";                            
+                                }
+                                
+                                
+                                
                             } else {
                                 echo "<tr><td colspan='3'>Nenhum registro encontrado</td></tr>";
                             }
